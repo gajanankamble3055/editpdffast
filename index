@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit PDF Fast</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Edit PDF Fast</h1>
+    <p>Free, simple and fast PDF editing for everyone.</p>
+  </header>
+
+  <main>
+    <div class="buttons">
+      <button disabled>Upload PDF (Coming Soon)</button>
+      <button disabled>Edit Text (Coming Soon)</button>
+      <button disabled>Add/Remove Images (Coming Soon)</button>
+      <button disabled>Add Signature (Coming Soon)</button>
+      <button disabled>Remove Watermark (Coming Soon)</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 EditPDFFast.com. All rights reserved.</p>
+  </footer>
+</body>
+</html>
