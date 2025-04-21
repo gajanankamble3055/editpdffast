@@ -49,42 +49,49 @@
 
     function renderPDF(data) {
       pdfjsLib.getDocument(data).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const scale = 1.5;
-          const viewport = page.getViewport({ scale });
+        pdfContainer.innerHTML = "";
 
-          const canvas = document.createElement("canvas");
-          const context = canvas.getContext("2d");
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+          pdf.getPage(pageNumber).then(page => {
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
 
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-          pdfContainer.innerHTML = "";
-          pdfContainer.appendChild(canvas);
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
 
-          canvas.addEventListener("click", function(e) {
-            const x = e.offsetX;
-            const y = e.offsetY;
-            addTextBox(x, y);
+            const wrapper = document.createElement("div");
+            wrapper.style.position = "relative";
+            wrapper.appendChild(canvas);
+            pdfContainer.appendChild(wrapper);
+
+            page.render(renderContext);
+
+            canvas.addEventListener("click", function(e) {
+              const rect = canvas.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              addTextBox(wrapper, x, y);
+            });
           });
-
-          page.render(renderContext);
-        });
+        }
       });
     }
 
-    function addTextBox(x, y) {
+    function addTextBox(wrapper, x, y) {
       const input = document.createElement("textarea");
       input.className = "text-box";
       input.style.left = x + "px";
       input.style.top = y + "px";
       input.rows = 1;
       input.cols = 20;
-      pdfContainer.appendChild(input);
+      wrapper.appendChild(input);
       input.focus();
 
       input.addEventListener("keydown", function(e) {
