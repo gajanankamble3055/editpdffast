@@ -1,37 +1,19 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f3f3f3;
     text-align: center;
-  }
-  
-  header {
-    background-color: #4a90e2;
-    color: white;
-    padding: 20px 0;
-  }
-  
-  main {
+    background-color: #f4f4f4;
     padding: 20px;
-  }
-  
-  .upload-section {
-    background-color: white;
-    padding: 20px;
-    margin: 20px auto;
-    width: 80%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  
-  #pdf-upload {
-    padding: 10px;
-    margin-top: 10px;
-  }
-  
-  #pdf-viewer {
+}
+
+h1 {
+    color: #333;
+}
+
+input[type="file"] {
+    margin: 20px;
+}
+
+#pdf-viewer {
+    position: relative;
     margin-top: 20px;
-    width: 100%;
-  }
-  
+}
