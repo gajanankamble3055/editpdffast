@@ -1,19 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit PDF Fast</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit PDF Fast</title>
+  <style>
+    #pdf-container {
+      border: 1px solid #ccc;
+      position: relative;
+    }
+    canvas {
+      border: 1px solid #333;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .text-box {
+      position: absolute;
+      color: red;
+      background-color: transparent;
+      border: none;
+      font-size: 16px;
+      resize: none;
+      outline: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>Edit PDF Fast</h1>
-    <p>Upload a PDF and add text to it</p>
+  <h2>EditPDFast.com – Free Online PDF Editor</h2>
+  <input type="file" id="file-input" accept="application/pdf">
+  <div id="pdf-container"></div>
 
-    <!-- PDF upload section -->
-    <input type="file" id="pdf-upload" accept="application/pdf" />
-    <div id="pdf-viewer"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const pdfContainer = document.getElementById('pdf-container');
 
-    <script src="script.js"></script>
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file && file.type === 'application/pdf') {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const typedArray = new Uint8Array(this.result);
+          renderPDF(typedArray);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    function renderPDF(data) {
+      pdfjsLib.getDocument(data).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+
+          pdfContainer.innerHTML = "";
+          pdfContainer.appendChild(canvas);
+
+          canvas.addEventListener("click", function(e) {
+            const x = e.offsetX;
+            const y = e.offsetY;
+            addTextBox(x, y);
+          });
+
+          page.render(renderContext);
+        });
+      });
+    }
+
+    function addTextBox(x, y) {
+      const input = document.createElement("textarea");
+      input.className = "text-box";
+      input.style.left = x + "px";
+      input.style.top = y + "px";
+      input.rows = 1;
+      input.cols = 20;
+      pdfContainer.appendChild(input);
+      input.focus();
+
+      input.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          input.blur();
+        }
+      });
+    }
+  </script>
 </body>
 </html>
